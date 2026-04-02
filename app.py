@@ -204,11 +204,28 @@ session.mount("https://", HTTPAdapter(max_retries=retries))
 # =========================
 # DOWNLOAD FILE (IF NOT EXISTS)
 # =========================
+import requests
+
 def download_similarity():
     if not os.path.exists("similarity.pkl"):
-        url = f"https://drive.google.com/uc?id={SIMILARITY_FILE_ID}"
-        with st.spinner("Downloading similarity data... (first run only)"):
-            gdown.download(url, "similarity.pkl", quiet=False)
+        file_id = SIMILARITY_FILE_ID
+        url = f"https://drive.google.com/uc?export=download&id={file_id}"
+
+        with st.spinner("Downloading similarity data..."):
+            session = requests.Session()
+            response = session.get(url, stream=True)
+
+            # Handle large file confirmation
+            for key, value in response.cookies.items():
+                if key.startswith("download_warning"):
+                    url = f"https://drive.google.com/uc?export=download&confirm={value}&id={file_id}"
+                    response = session.get(url, stream=True)
+                    break
+
+            with open("similarity.pkl", "wb") as f:
+                for chunk in response.iter_content(32768):
+                    if chunk:
+                        f.write(chunk)
 
 # =========================
 # FETCH POSTER
