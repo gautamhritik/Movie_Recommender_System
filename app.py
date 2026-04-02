@@ -227,6 +227,10 @@ def download_similarity():
                     if chunk:
                         f.write(chunk)
 
+
+import os
+st.write("File size:", os.path.getsize("similarity.pkl"))                        
+
 # =========================
 # FETCH POSTER
 # =========================
