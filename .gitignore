@@ -1,4 +1,4 @@
-# Virtual environment
+# Virtual environments
 .venv/
 venv/
 
@@ -8,7 +8,7 @@ __pycache__/
 *.pyo
 *.pyd
 
-# IDE / Editor
+# IDE / Editor folders
 .vscode/
 .idea/
 
@@ -19,8 +19,13 @@ Thumbs.db
 # Logs
 *.log
 
-# Environment variables (important for API keys)
+# Environment variables
 .env
 
-# Large model file (hosted on Google Drive now)
+# Ignore large model/data files (IMPORTANT)
 similarity.pkl
+
+# Optional: ignore all pickle files except required ones
+# *.pkl
+# !movies.pkl
+# !movies_dict.pkl
