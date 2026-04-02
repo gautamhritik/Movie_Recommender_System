@@ -328,7 +328,8 @@ from urllib3.util.retry import Retry
 # =========================
 # CONFIG
 # =========================
-API_KEY = os.getenv("TMDB_API_KEY", "your_tmdb_api_key_here")
+# API_KEY = os.getenv("TMDB_API_KEY", "your_tmdb_api_key_here")
+API_KEY = st.secrets["TMDB_API_KEY"]
 
 # ✅ ONLY FILE ID (NOT LINK)
 SIMILARITY_FILE_ID = "1lPhdlfZZHIQffeublLn4ukB_XQP5gnIG"
@@ -371,21 +372,39 @@ def download_similarity():
 # =========================
 # FETCH POSTER
 # =========================
+# def fetch_poster(movie_id):
+#     try:
+#         url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US"
+#         response = session.get(url, timeout=5)
+
+#         if response.status_code != 200:
+#             return "https://via.placeholder.com/500x750?text=API+Error"
+
+#         data = response.json()
+#         poster_path = data.get('poster_path')
+
+#         if poster_path:
+#             return "https://image.tmdb.org/t/p/w500/" + poster_path
+#         else:
+#             return "https://via.placeholder.com/500x750?text=No+Poster"
+
+#     except:
+#         return "https://via.placeholder.com/500x750?text=Error"
+
 def fetch_poster(movie_id):
     try:
         url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US"
         response = session.get(url, timeout=5)
 
         if response.status_code != 200:
-            return "https://via.placeholder.com/500x750?text=API+Error"
+            return "https://via.placeholder.com/500x750?text=API+Fail"
 
         data = response.json()
-        poster_path = data.get('poster_path')
 
-        if poster_path:
-            return "https://image.tmdb.org/t/p/w500/" + poster_path
-        else:
-            return "https://via.placeholder.com/500x750?text=No+Poster"
+        if not data.get("poster_path"):
+            return "https://via.placeholder.com/500x750?text=No+Image"
+
+        return "https://image.tmdb.org/t/p/w500/" + data["poster_path"]
 
     except:
         return "https://via.placeholder.com/500x750?text=Error"
