@@ -349,7 +349,19 @@ session.mount("https://", HTTPAdapter(max_retries=retries))
 # =========================
 # DOWNLOAD FILE
 # =========================
+# def download_similarity():
+#     if not os.path.exists("similarity.pkl"):
+#         url = f"https://drive.google.com/uc?id={SIMILARITY_FILE_ID}"
+
+#         with st.spinner("Downloading similarity data (first run)..."):
+#             gdown.download(url, "similarity.pkl", quiet=False, fuzzy=True)
+
 def download_similarity():
+    # ALWAYS delete corrupted file
+    if os.path.exists("similarity.pkl"):
+        if os.path.getsize("similarity.pkl") < 100000000:  # less than ~100MB = bad file
+            os.remove("similarity.pkl")
+
     if not os.path.exists("similarity.pkl"):
         url = f"https://drive.google.com/uc?id={SIMILARITY_FILE_ID}"
 
